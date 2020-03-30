@@ -1,0 +1,38 @@
+{
+    "variables": {
+      "vhosts": ""
+    },
+    "builders": [
+      {
+        "type": "virtualbox-iso",
+        "iso_url": "http://ftp.man.poznan.pl/pub/centos/7.7.1908/isos/x86_64/CentOS-7-x86_64-Minimal-1908.iso",
+        "iso_checksum": "9a2c47d97b9975452f7d582264e9fc16d108ed8252ac6816239a3b58cef5c53d",
+        "iso_checksum_type": "sha256",
+        "vm_name": "CentOS7_nginx",
+        "guest_os_type": "RedHat_64",
+        "ssh_username": "root",
+        "ssh_password": "packer",
+        "ssh_port": 22,
+        "ssh_timeout": "10m",
+        "vboxmanage": [
+          ["modifyvm", "{{.Name}}", "--memory", "2048"],
+          ["modifyvm", "{{.Name}}", "--cpus", "2"],
+          ["modifyvm", "{{.Name}}", "--audio", "none"]
+        ],
+        "http_directory": "http",
+        "headless": true,
+        "boot_command": [
+          "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+        ],
+        "boot_wait": "10s",
+        "disk_size": 8192
+      }
+    ],
+    "provisioners": [{
+      "type": "ansible",
+      "playbook_file": "./playbook.yml",
+      "extra_arguments": [
+        "--extra-vars", "vhosts={{user `vhosts`}}"
+      ]
+    }]
+  }
