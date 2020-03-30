@@ -6,15 +6,19 @@
       set_fact:
         vhosts_list: "{{ vhosts.split() }}"
 
-    - name: Add epel-release
-      yum:
-        name: epel-release
-        state: present
-  
-    - name: Install nginx
+    - name: "Add NGINX repo"
+      yum_repository:
+        name: nginx
+        baseurl: https://nginx.org/packages/centos/$releasever/$basearch/
+        description: NGINX Repository
+        enabled: yes
+        gpgcheck: no
+
+    - name: "Install NGINX"
       yum:
         name: nginx
-        state: present
+        state: latest
+        update_cache: yes
 
     - name: "Create parent directories"
       file:
