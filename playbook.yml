@@ -6,20 +6,6 @@
       set_fact:
         vhosts_list: "{{ vhosts.split() }}"
 
-    - name: "Add NGINX repo"
-      yum_repository:
-        name: nginx
-        baseurl: https://nginx.org/packages/centos/$releasever/$basearch/
-        description: NGINX Repository
-        enabled: yes
-        gpgcheck: no
-
-    - name: "Install NGINX"
-      yum:
-        name: nginx
-        state: latest
-        update_cache: yes
-
     - name: "Create parent directories"
       file:
         path: "/var/www/{{ item }}/html"

@@ -13,14 +13,13 @@
         "ssh_username": "root",
         "ssh_password": "packer",
         "ssh_port": 22,
-        "ssh_timeout": "10m",
+        "ssh_timeout": "20m",
+        "headless": true,
         "vboxmanage": [
-          ["modifyvm", "{{.Name}}", "--memory", "2048"],
-          ["modifyvm", "{{.Name}}", "--cpus", "2"],
-          ["modifyvm", "{{.Name}}", "--audio", "none"]
+          ["modifyvm", "{{.Name}}", "--memory", "1024"],
+          ["modifyvm", "{{.Name}}", "--cpus", "1"]
         ],
         "http_directory": "http",
-        "headless": true,
         "boot_command": [
           "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
         ],
@@ -28,11 +27,20 @@
         "disk_size": 8192
       }
     ],
-    "provisioners": [{
+    "provisioners": [
+      {
+        "type": "shell",
+        "inline": "sudo yum -y install epel-release"
+      },
+      {
+        "type": "shell",
+        "inline": "sudo yum -y install nginx"
+      },
+      {
       "type": "ansible",
       "playbook_file": "./playbook.yml",
       "extra_arguments": [
-        "--extra-vars", "vhosts={{user `vhosts`}}"
+        "-v", "--extra-vars", "vhosts={{user `vhosts`}}"
       ]
-    }]
+      }]
   }
