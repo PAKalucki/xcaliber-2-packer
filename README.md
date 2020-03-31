@@ -16,7 +16,8 @@ versions:
 VirtualBox Version 5.2.34_Ubuntu  
 Ansible 2.9.6  
 Packer 1.5.5  
-
-run me with:  
+  
 packer build -var 'vhosts="example.com sth.pl"' template.json  
-vhosts should be space separated values  
+vhosts odzielone spacjami  
+
+Tbh nie jestem w stanie wyjasnic czemu podczas budowania packerem nginx instaluje sie uszkodzony niezaleznie od tego jak to robie, pod odpaleniu virtualki i yum reinstall nginx wszystko dziala...
